@@ -7,6 +7,7 @@ Cập nhật lần cuối: 25/07/2025
 * Registrar (Nhà đăng ký): MarkMonitor, Inc. MarkMonitor Inc. (IANA ID: 292)
 * Địa chỉ trang web MarkMonitor (trang web đăng ký): http://www.markmonitor.com
 * Whois Server: whois.markmonitor.com
+* Ngày tồn tại: 7.440 
 * Ngày đăng ký lần đầu tiên: 11/03/2005
 * Ngày hết hạn tên miền: 11/03/2027
 * Ngày cập nhật gần nhất: 29/05/2025
