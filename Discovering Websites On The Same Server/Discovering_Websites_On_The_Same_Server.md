@@ -1,6 +1,16 @@
 # Thu thập website khác cùng máy chủ
 Tên tài liệu: Thu thập thông tin website khác cùng máy chủ - 'shopify.com' Thực hiện: Nguyễn Thị Kim Dung Cập nhật lần cuối: 25/07/2025
-## 1. Danh sách domain khác cùng IP:
+## 1.  Thông số kỹ thuật
+* Tên miền chính: 'shopify.com'
+* Tổ chức sở hữu domain: Shopify, Inc.
+* Tổ chức cung cấp hosting: Cloudflare, Inc.
+* Địa chỉ IP công bố: 23.227.38.33
+* ASN: AS13335
+* Tên hệ thống tự trị (AS Name): CLOUDFLARENET
+* Quốc gia đặt máy chủ: Canada
+* Thành phố: Ottawa
+* Số lượng domain cùng IP: 85 domain
+## 2. Danh sách một số website chia sẻ cùng domain
 Có tổng cộng 85 tên miền đang sử dụng cùng một máy chủ với 'shopify.com' với IP là: 23.227.38.33 
 | STT | Tên miền (Domain)             | Ngày truy vết gần nhất (Last Resolved) |
 |-----|-------------------------------|----------------------------------------|
@@ -89,4 +99,5 @@ Có tổng cộng 85 tên miền đang sử dụng cùng một máy chủ với 
 | 83  | yotalife.com               | 2025-07-10                             |
 | 84  | yourshoppingcart.co.za     | 2018-06-03                             |
 | 85  | yungnrich.com              | 2025-07-10                             |
-## 2. 
+
+
