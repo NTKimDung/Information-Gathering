@@ -11,18 +11,18 @@ Các API endpoint chưa công khai
 Chiếm quyền truy cập vào cơ sở dữ liệu
 Dùng token hoặc key tìm được để truy cập các dịch vụ nội bộ
 Sử dụng bản backup hoặc source code để tìm lỗi logic, RCE
-Phân tích sai sót lập trình viên / sysadmin:
+* Phân tích sai sót lập trình viên / sysadmin:
 Để lại file .bak, .old, .zip, debug.log,…
 Commit nhầm .env, key bí mật vào repo Git
 * Dò tìm điểm yếu để hỗ trợ các bước tấn công tiếp theo, như:
 Privilege escalation
 Local File Inclusion (LFI), Remote Code Execution (RCE)
 ## 2. Thu thập các file ẩn bằng công cụ dirsearch
-kết quả cho thấy:                                                                                                                                                                                                                                                                                            
+kết quả cho thấy:                                                                                                                                                                                                                                                                                          
 Extensions: php, aspx, jsp, html, js | HTTP method: GET | Threads: 25 | Wordlist size: 11460
 Output File: /home/kali/reports/_shopify.com/_25-07-28_05-39-43.txt
 Target: https://shopify.com/
-[05:39:44] Starting:                                                                                                                                        
+                                                                                                                                   
 [05:39:49] 200 -  606B  - /.well-known/assetlinks.json                      
 [05:39:49] 200 -  354B  - /.well-known/apple-app-site-association           
 [05:39:56] 301 -  167B  - /axis2-web//HappyAxis.jsp  ->  https://www.shopify.com/axis2-web/HappyAxis.jsp
@@ -33,15 +33,19 @@ Target: https://shopify.com/
 [05:40:01] 301 -  167B  - /engine/classes/swfupload//swfupload.swf  ->  https://www.shopify.com/engine/classes/swfupload/swfupload.swf
 [05:40:02] 301 -  167B  - /extjs/resources//charts.swf  ->  https://www.shopify.com/extjs/resources/charts.swf
 [05:40:03] 301 -  167B  - /html/js/misc/swfupload//swfupload.swf  ->  https://www.shopify.com/html/js/misc/swfupload/swfupload.swf
-[05:40:17] 200 -   65B  - /robots.txt                                       
+[05:40:17] 200 -   65B  - /robots.txt  
+
 Giải thích:
+
 [05:39:49] 200 -  606B  - /.well-known/assetlinks.json
 [05:39:49] 200 -  354B  - /.well-known/apple-app-site-association
 → Status 200 = tồn tại, có thể truy cập
 → Các file .well-known là chuẩn dùng cho mobile app linking hoặc xác minh
+
 * Các dòng: 
 301 - ... - /axis2-web//HappyAxis.jsp  -> https://www.shopify.com/axis2-web/HappyAxis.jsp
 → 301 là chuyển hướng → URL tồn tại nhưng chuyển sang link mới
+
 *Dòng:
 [05:40:17] 200 -   65B  - /robots.txt
 → File robots.txt thường chứa danh sách các thư mục mà crawler (bot) không nên truy cập → nhưng pentester thì ngược lại, hay soi kỹ file này.
