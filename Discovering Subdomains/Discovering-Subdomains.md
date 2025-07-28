@@ -12,7 +12,7 @@ Mở rộng phạm vi tấn công để hỗ trợ kiểm thử xâm nhập ho�
 Hỗ trợ các bước tiếp theo trong quy trình tấn công
 → Kết hợp với các công cụ khác như httpx, nmap, nuclei để dò cổng, phát hiện công nghệ và kiểm tra lỗ hổng.
 ## 2. Tìm kiếm các subdomain bằng công cụ subfider
-Kết quả sau khi dùng công cụ subfider:
+Kết quả sau khi dùng công cụ subfider: Tìm ra 580 subdomains từ 'shopify.com'
 104.nat.ash.shopify.com
 j.ssl.shopify.com
 chat.shopify.com
