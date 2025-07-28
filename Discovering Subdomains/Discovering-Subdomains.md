@@ -595,4 +595,29 @@ reportcenter.shopify.com
 certifications.shopify.com
 ## 3. Điều tra subdomain bằng công cụ knockpy
 Kết quả cho thấy:
+shopify.com ['23.227.38.33']
+http  [301, 'https://www.shopify.com/', 'cloudflare']
+https [301, 'https://www.shopify.com/', 'cloudflare']
+cert  [True, '2025-09-21', 'shopify.com']
+Giải thích:
+shopify.com ['23.227.38.33']
+shopify.com là domain chính đang được kiểm tra.
+23.227.38.33 là địa chỉ IP mà domain này đang trỏ tới.
+Đây là địa chỉ máy chủ chịu trách nhiệm xử lý các yêu cầu gửi đến shopify.com.
+http [301, 'https://www.shopify.com/', 'cloudflare']
+Kết nối qua HTTP (không bảo mật) được chuyển hướng (HTTP status code 301) đến:
+https://www.shopify.com/ (phiên bản bảo mật).
+Server phản hồi là Cloudflare (tức là Shopify đang dùng dịch vụ CDN và bảo vệ của Cloudflare).
+https [301, 'https://www.shopify.com/', 'cloudflare']
+Kết nối qua HTTPS cũng trả về mã trạng thái 301.
+Điều này cho thấy có thể có thêm một bước chuyển hướng khác bên trong (như thêm /en hoặc ngôn ngữ địa phương…).
+cert [True, '2025-09-21', 'shopify.com']
+True: Chứng chỉ SSL hợp lệ.
+2025-09-21: Ngày hết hạn của chứng chỉ SSL.
+shopify.com: Tên miền mà chứng chỉ SSL được cấp cho.
+
+
+
+  
+
 
