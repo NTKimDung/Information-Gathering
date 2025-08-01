@@ -143,7 +143,7 @@ Bước 3: Ta điều tra công nghệ của trang web bằng cách nhất chu�
 ### 3. Điều tra sử dụng tool
 #### 3.1 Công cụ Wappalyzer
 Ta cài đặc Wappalyzer là công cụ tiện ích ở trên trình duyệt web. Ở đây ta điều tra detect technologies của website "shopify.com" ta thấy được có các công cụ HSTS, Cloudflare, HTTP/3 .
-### 3.2 Công cụ nuclei
+#### 3.2 Công cụ nuclei
 Đây là công cụ scan. Cơ chế hoạt động đây là công cụ template. Khi chạy tool nuclei thì thì template sẽ load bộ luật này thì sẽ kiểm tra xem trong trang web có dùng công cụ nào thì sẽ hiện ra kết quả.
 Công cụ scan hết các bộ luật trong template để kiểm tra các thông tin của website không chỉ điều tra công nghệ mà còn các thông tin khác như whois, subdomain, ... 
 Ở đây ta điều tra được kết quả "[tech-detect:cloudflare] [http] [info] https://shopify.com" 
@@ -151,13 +151,82 @@ Cloudflare là một công ty công nghệcung cấp nhiều dịch vụ bảo m
 "[mx-service-detector:Google Apps] [dns] [info] shopify.com"
 "[dmarc-detect] [dns] [info] _dmarc.shopify.com [""v=DMARC1; p=reject; pct=100; fo=1; rua=mailto:dmarc-aggregate@shopify.com;ruf=mailto:dmarc-reports@shopify.com""]"
 "[assetlinks-detect] [http] [info] https://shopify.com/.well-known/assetlinks.json"
-### 3.3 Công cụ SearchSploit
+#### 3.3 Công cụ SearchSploit
 Tool này để ta search các sploit hoặc các framework bạn vừa tìm ra ở trên bằng các công cụ như wappalyzer hoặc công cụ nuclei, ... 
 Sau khi điều tra bằng searchsploit cho website "shpoify.com" thì ta không nhận được bất kì kết quả nào. Vậy ta có thể thấy được website shopify là nền tảng lớn ít lỗ hổng công khai.
 ## D. RECON FINDING HIDDEN CONTECT
 ### 1. Cách recon finding hidden contents
+Thu thập các thông tin ẩn như file, port, parameter,... của website để có thể lợi dụng để tấn công.
+Cách tìm scan port:
+Port scan có hai kiểu scan là TCP Scan và UDP Scan. Nguyên lý hoạt động bạn gửi một gói tin lên server và server sẽ gửi về cho bạn một gói tin khác. Dựa vào gói tin trả về bạn sẽ xác định được port đang mở và port nào đang đóng. Với TCP Scan thì khi client gửi SYN Scan lên server và cùng với một thông số port xác định thì server gửi về SYN/ACK thì client biết được các port trong server được đang mở còn nếu server gửi lại cho client là RST/SYN thì cleint biết được port server đang đóng. 
+### 2. Các tool
+#### 2.1 Port Scan Tool _ Naabu
+Mục tiêu: list được các tất cả các port và có khả năng thấy được service đang chạy port đó để ta lợi dụng port đó để tấn công.
+Lợi ích: công cụ naabu có thể scan khoản port rộng một cách nhanh chóng.
+Naabu có thể tích hợp với nmap để khai thác thông tin.
+ngoài ra có nhiều định dạng đầu ra như JSON, Fiel, Stdout.
+Kết quả khi dùng tích hợp naabu với nmap:
+PORT     STATE SERVICE  VERSION
+80/tcp   open  http     Cloudflare http proxy
+443/tcp  open  ssl/http Cloudflare http proxy
+8080/tcp open  http     Cloudflare http proxy
+8443/tcp open  ssl/http Cloudflare http proxy
+8880/tcp open  http     Cloudflare http proxy
+#### 2.2 File Bruteforcing _ disearch, feroxbuster,gobuster
+Tool disearch được chạy bằng python dùng wordlist để brute-force URL của server web, nhằm tìm các file ẩn có trong website.
+Kết quả sau khi dùng dirsearch: 
+"[02:55:47] 200 -  354B  - /.well-known/apple-app-site-association           
+[02:55:47] 200 -  606B  - /.well-known/assetlinks.json                      
+[02:56:05] 301 -  167B  - /axis//happyaxis.jsp  ->  https://www.shopify.com/axis/happyaxis.jsp
+[02:56:05] 301 -  167B  - /axis2-web//HappyAxis.jsp  ->  https://www.shopify.com/axis2-web/HappyAxis.jsp
+[02:56:05] 301 -  167B  - /axis2//axis2-web/HappyAxis.jsp  ->  https://www.shopify.com/axis2/axis2-web/HappyAxis.jsp
+[02:56:09] 301 -  167B  - /Citrix//AccessPlatform/auth/clientscripts/cookies.js  ->  https://www.shopify.com/Citrix/AccessPlatform/auth/clientscripts/cookies.js
+[02:56:15] 301 -  167B  - /engine/classes/swfupload//swfupload.swf  ->  https://www.shopify.com/engine/classes/swfupload/swfupload.swf
+[02:56:15] 301 -  167B  - /engine/classes/swfupload//swfupload_f9.swf  ->  https://www.shopify.com/engine/classes/swfupload/swfupload_f9.swf
+[02:56:16] 301 -  167B  - /extjs/resources//charts.swf  ->  https://www.shopify.com/extjs/resources/charts.swf
+[02:56:20] 301 -  167B  - /html/js/misc/swfupload//swfupload.swf  ->  https://www.shopify.com/html/js/misc/swfupload/swfupload.swf
+[02:56:37] 200 -   65B  - /robots.txt   "
+Dirsearch tìm được một số tệp .well-known, robots.txt, .swf, .jsp, ... cho thấy vẫn còn tồn tại endpoint cũ, có thể chứa rủi ro bảo mật.
+ #### 2.3 Parameter Bruteforcing_Arjun
+ Mục đích: Các trang web cho bạn tương tác thì bạn có thể xem được request theo dạng GET/PORT ta biết được các giá trị các biến đưa vào các parameter hoặc vào webserver để xửa lý. Có thể gặp các trang web không biết được parameter thì ta phải bruteforcing thì công cụ để làm việt đó là Arjun. Sau khi điều tra thì ta có thể lợi dụng các tham số ẩn (hidden GET & POST parameters) trong URL để thực hiện các cuộc tấn công như:
+XSS (Cross Site Scripting)
+SQL Injection
+LFI/RFI (File Inclusion)
+Command Injection, v.v.
+Kết quả sau khi dùng công cụ arjun cho website "shopify.com" là:
+Tìm ra được 11 parameters: url, manifestPath, path, mode, parentId, version, module, logo, basename, id, name
+Parameters found: version, lang, p, page, sort, ref, name, q, country, mybulletin
+## E. RECON SUBDOMAIN ENUMERATION VÀ HTTP
+### 1. Cách recon subdomain enumeration và http
+Subdomain Enumeration là quá trình thu thập các tên miền phụ (subdomains) của một tên miền chính. Có hai cách để tìm là Active và Passive Enumeration.
+### 2. Các công cụ
+#### 2.1 Các công cụ khai thác thụ động
+Ta có thể sử dụng Certificate transparecy để tìm các subdomain hoặc sử dụng trang https://crt.sh để tìm ra các subdomain của đối tượng mình cần điều tra.
+Hoặc ta có thể sử dụng kỹ thuật search engine ta dùng google dork để thu thập thông tin nhạy cảm từ các website. Với mục đích tìm subdomain thì ta dùng câu lệnh "site:shopify.com" để tìm subdomain của website của shopify.
+Kỹ thuật DNS: ta dùng trang web "https://dnsdumster.com" để tìm kiếm với kết quả trả về là các subdomain.
+Tool Subfinder: Lên internet để tìm tất cả các subdomain trong tất cả các search engine nơi mà các subdomain mà đã, đang và xuất hiện mà không ảnh hưỡng đến các server trang web mà ta muốn thu thập thông tin.
+Kết quả sau khi sử dụng công cụ Subfinder: Tìm ra 580 subdomains từ 'shopify.com'.
+#### 2.2 Các công cụ khai thác chủ động _ Knockpy
+Tool Knockpy: được viết bằng python với mục đích dò tìm subdomain với wordlist, truy vấn các bản ghi dns, ... 
+Ngoài sử dụng tool ta có thể bruteforcing.
+#### 2.3 Công cụ HTTPX:
+Sau khi tìm được các subdomain web service thì ta dùng HTTPX để kiểm tra trạng thái hoạt động và thu hập thông tin từ danh sách miền.
+## G. RECON WAYBACK MACHINE CRAWLING
+### 1. Wayback machine:
+Nó là một trang web chứa các trang web ngày xưa có nghĩa là lưu trữ bản snapshot lịch sử của trang web, giúp bạn thấy các URL, endpoint đã từng tồn tại nhưng có thể đã bị xóa trên live site. Mục đích: Check status của trang web có thay đổi hay không hoặc lấy được dữ liệu crawler của trang web đó hoặc check file cũ có thể vẫn tồn tại ở nơi nào đó.
+Trang web mà để điều tra là: "[https://waybackmachine.com](https://web.archive.org/)" trang web này để hiện thị được sự thay đổi của trang web.
+Wayback machine dùng cho trang robots.txt để tìm được lỗ hổng để ta có thể tấn công.
+Wayback machine mà trả về mà 404 hoặc 403 để lấy được một số thông tin để tấn công. và ngoài ra khi sử dụng waybackmachine thì ta có thể lấy tất cả đường dẫn và parameter có thể là một lợi thế để tấn công.
+Kết quả khi sử dụng trang web wayback machine về website "shopify.com" ta có thể thấy được dữ liệu đến từ nhiều nguồn crawling khác nhau, hiện thị được tất cả các thời gian mà trang web thay đổi,....
+## 2. Công cụ để list ra các URL lịch sử_gau
+GAU (GetAllUrls) là một công cụ dùng để thu thập tất cả các URL đã từng được thu thập từ các dịch vụ như Wayback Machine, Common Crawl, URLScan... dựa trên một tên miền hoặc subdomain.
+Kết quả sau khi sử dụng công chụ gau cho website "shopify.com" là:
+
 ## Tài liệu tham khảo
 * WHOIS Record (Cập nhật lần cuối: 25/07/2025)
 * [MarkMonitor - Nhà đăng ký tên miền](https://www.markmonitor.com)
 * [ICANN WHOIS](http://wdprs.internic.net/)
 * [EPP Status Codes - ICANN](https://www.icann.org/resources/pages/epp-status-codes)
+* https://www.kali.org/tools/dirsearch/
+* https://infosecwriteups.com/recon-everything
+* https://www.cobalt.io/blog/scope-based-recon-smart-recon-tactics
