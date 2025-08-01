@@ -1,4 +1,39 @@
 # Information Gathering
+Tên tài liệu: Information Gathering - 'shopify.com' Thực hiện: Nguyễn Thị Kim Dung Cập nhật lần cuối: 01/08/2025
+# Mục lục
+- [A. Thu thập thông tin tên miền - 'shopify.com']
+  - [1. Thông tin tổng quan]
+  - [2. Trạng thái tên miền (Registrar Status)]
+  - [3. Máy chủ tên miền (Name Server)])
+  - [4. Thông tin địa chỉ IP]
+  - [5. Thông tin kỹ thuật]
+- [B. Thu thập website khác cùng máy chủ]
+  - [1. Thông số kỹ thuật]
+  - [2. Danh sách một số website chia sẻ cùng domain]
+- [C. Recon Detect Technologies]
+  - [1. Quy trình thực hiện]
+  - [2. Điều tra thủ công]
+  - [3. Điều tra sử dụng công cụ]
+    - [3.1 Wappalyzer]
+    - [3.2 nuclei]
+    - [3.3 SearchSploit]
+- [D. Recon Finding Hidden Content]
+  - [1. Khái niệm và phương pháp]
+  - [2. Công cụ sử dụng]
+    - [2.1 Naabu (Port Scan Tool)]
+    - [2.2 Dirsearch/Feroxbuster/Gobuster (File Bruteforcing)]
+    - [2.3 Arjun (Parameter Bruteforcing)]
+- [E. Recon Subdomain Enumeration và HTTP]
+  - [1. Khái niệm và phương pháp]
+  - [2. Các công cụ]
+    - [2.1 Công cụ thụ động (crt.sh, Google Dork, DNSdumpster)]
+    - [2.2 Knockpy (Chủ động bruteforce)]
+    - [2.3 HTTPX]
+- [F. Recon Wayback Machine Crawling]
+    - [1. Giới thiệu Wayback Machine]
+    - [2. Công cụ GAU - GetAllUrls]
+- [H. Tổng kết]
+- [G. Tài liệu tham khảo]
 
 ## A. THU THẬP THÔNG TIN TÊN MIỀN - 'shopify.com'
 ### 1. Thông tin tổng quan
@@ -211,7 +246,7 @@ Tool Knockpy: được viết bằng python với mục đích dò tìm subdomai
 Ngoài sử dụng tool ta có thể bruteforcing.
 #### 2.3 Công cụ HTTPX:
 Sau khi tìm được các subdomain web service thì ta dùng HTTPX để kiểm tra trạng thái hoạt động và thu hập thông tin từ danh sách miền.
-## G. RECON WAYBACK MACHINE CRAWLING
+## F. RECON WAYBACK MACHINE CRAWLING
 ### 1. Wayback machine:
 Nó là một trang web chứa các trang web ngày xưa có nghĩa là lưu trữ bản snapshot lịch sử của trang web, giúp bạn thấy các URL, endpoint đã từng tồn tại nhưng có thể đã bị xóa trên live site. Mục đích: Check status của trang web có thay đổi hay không hoặc lấy được dữ liệu crawler của trang web đó hoặc check file cũ có thể vẫn tồn tại ở nơi nào đó.
 Trang web mà để điều tra là: "[https://waybackmachine.com](https://web.archive.org/)" trang web này để hiện thị được sự thay đổi của trang web.
@@ -220,9 +255,16 @@ Wayback machine mà trả về mà 404 hoặc 403 để lấy được một s�
 Kết quả khi sử dụng trang web wayback machine về website "shopify.com" ta có thể thấy được dữ liệu đến từ nhiều nguồn crawling khác nhau, hiện thị được tất cả các thời gian mà trang web thay đổi,....
 ## 2. Công cụ để list ra các URL lịch sử_gau
 GAU (GetAllUrls) là một công cụ dùng để thu thập tất cả các URL đã từng được thu thập từ các dịch vụ như Wayback Machine, Common Crawl, URLScan... dựa trên một tên miền hoặc subdomain.
-Kết quả sau khi sử dụng công chụ gau cho website "shopify.com" là:
-
-## Tài liệu tham khảo
+Kết quả sau khi sử dụng công chụ gau cho website "shopify.com" là: 
+Thu được hơn 50 dòng URL. Ta thấy được một số URL chứa tham số truy vấn (query parameters) rất phù hợp để phân tích hoặc khai thác thử như:
+"https://shopify.com/10002752/account?locale=en
+https://shopify.com/10011279418/account?locale=es&region_country=CO
+https://shopify.com/10027190/account?locale=el&region_country=FI". Ngoài ra còn có một số URL sử dụng giao thức http:// hoặc không có www. → giúp phát hiện các cấu hình web server cũ hơn hoặc chưa redirect đúng và nhiều bản ghi lặp lại https://www.shopify.com/ hoặc https://shopify.com/ → cần xử lý loại bỏ trùng (sort -u) để có danh sách sạch.
+## G. Tổng kết
+Quá trình thu thập thông tin (reconnaissance) đối với domain shopify.com đã được thực hiện toàn diện qua nhiều bước, bao gồm: thu thập thông tin DNS, điều tra công nghệ sử dụng, tìm kiếm subdomain, phát hiện nội dung ẩn, và truy vết lịch sử website thông qua Wayback Machine. Việc sử dụng kết hợp các công cụ như Wappalyzer, Nuclei, Searchsploit, Dirsearch, Arjun, Knockpy, HTTPX, GAU... đã giúp nâng cao hiệu quả và độ chính xác trong quá trình phân tích.
+Thông qua đó, một số endpoint nhạy cảm, công nghệ cũ, hoặc tài nguyên ẩn đã được phát hiện – tạo nền tảng vững chắc cho các bước tiếp theo như đánh giá bảo mật, kiểm thử thâm nhập (pentest), hoặc tìm kiếm lỗ hổng.
+Phương pháp tiếp cận theo từng lớp từ thụ động đến chủ động, kết hợp các nguồn dữ liệu như crt.sh, Wayback Machine, CommonCrawl cho thấy hiệu quả cao trong việc vạch rõ bề mặt tấn công (attack surface) tiềm năng của một hệ thống. Kết quả này có thể tiếp tục được sử dụng để phục vụ quá trình khai thác, phát hiện lỗ hổng, và báo cáo bảo mật chuyên sâu.
+## H. Tài liệu tham khảo
 * WHOIS Record (Cập nhật lần cuối: 25/07/2025)
 * [MarkMonitor - Nhà đăng ký tên miền](https://www.markmonitor.com)
 * [ICANN WHOIS](http://wdprs.internic.net/)
